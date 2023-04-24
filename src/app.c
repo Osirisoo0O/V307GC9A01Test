@@ -43,23 +43,26 @@ void SPI_Send_CMD(uint16_t data)
 {
     LCD_Send_Command();
     SPI_Write_Bus(SPI1,data);
-    LCD_Send_Data();
 }
 void SPI_Send_Data(uint16_t data){
+    LCD_Send_Data();
+    SPI_Write_Bus(SPI1,data);
+}
+
+void SPI_Send_DataH(uint16_t data)
+{
+    LCD_Send_Data();
+    SPI_Write_Bus(SPI1,data>>8);
     SPI_Write_Bus(SPI1,data);
 }
 void LCD_Address_Set(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
 {
 		SPI_Send_CMD(0x2A);//列地址设置
-        SPI_Send_Data(0);
-		SPI_Send_Data(x1);
-        SPI_Send_Data(0);
-		SPI_Send_Data(x2);
+		SPI_Send_DataH(x1);
+		SPI_Send_DataH(x2);
 		SPI_Send_CMD(0x2B);//行地址设置
-        SPI_Send_Data(0);
-		SPI_Send_Data(y1);
-        SPI_Send_Data(0);
-		SPI_Send_Data(y2);
+		SPI_Send_DataH(y1);
+		SPI_Send_DataH(y2);
 		SPI_Send_CMD(0x2C);//储存器写
 }
 void LCD_Fill(uint16_t xsta,uint16_t ysta,uint16_t xend,uint16_t yend,uint16_t color)
@@ -415,7 +418,7 @@ uint8_t i = 6;
 uint16_t COLOR = 0xFFFF;
 u8 TxData[480]; 
 
-static void LCD_Clear(void)
+static void LCD_Clear(uint16_t color)
 {
     unsigned char Line, column;
     LCD_Address_Set(0, 0, 239, 239);
@@ -423,15 +426,14 @@ static void LCD_Clear(void)
     {
         for (column = 0; column < 240; column++) // column loop
         {
-            SPI_Send_Data(0xFF);
-            SPI_Send_Data(0xFF);
-            //SPI_Send_Data(0x00);
+            SPI_Send_Data(color>>8);
+            SPI_Send_Data(color);
         }
     }
 }
 static void LCD_Full(uint16_t color)
 {
-    LCD_Address_Set(0, 0, 239 , 239 );
+    LCD_Address_Set(0,0,239,239);
     for (int i = 0; i < 480; i+=2)
     {
         TxData[i]=color >> 8;
@@ -441,7 +443,7 @@ static void LCD_Full(uint16_t color)
     for (i = 0; i < 240; i++)
     {
 
-        SPI_I2S_DMACmd(SPI1, SPI_I2S_DMAReq_Tx, ENABLE); //????1?DMA??
+        SPI_I2S_DMACmd(SPI1, SPI_I2S_DMAReq_Tx, ENABLE); //SPI1DMA
        
         DMA_Cmd(DMA1_Channel3, DISABLE );    
         DMA_SetCurrDataCounter(DMA1_Channel3,480);
@@ -449,14 +451,18 @@ static void LCD_Full(uint16_t color)
 
         while (1)
         {
-            if (DMA_GetFlagStatus(DMA1_FLAG_TC3) != RESET) // µÈ´ýÍ¨µÀ4´«ÊäÍê³É
+            if (DMA_GetFlagStatus(DMA1_FLAG_TC3) != RESET) 
             {
-                DMA_ClearFlag(DMA1_FLAG_TC3); // Çå³ýÍ¨µÀ4´«ÊäÍê³É±êÖ¾
+                DMA_ClearFlag(DMA1_FLAG_TC3); 
                 break;
             }
         }
     }
 }
+static void LCD_Drawing(u8 data[]){
+
+}
+
 
 int main(void)
 {
@@ -470,14 +476,14 @@ int main(void)
 	LCD_Init();
 	printf("LCD init\r\n");
 
-	LCD_Select();
 
 	LCD_BackLight_ON();
 
-    LCD_Clear();
+    LCD_Full(0xFFFF);
 	printf("LCD Clear\r\n");
 
     Delay_Ms(1000);
+	LCD_Select();
 
 while (1)
 {

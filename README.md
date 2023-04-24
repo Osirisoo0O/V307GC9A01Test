@@ -12,7 +12,7 @@ Make sure installed VSCode/PlatformIO/[WCH CH32V](https://github.com/Community-P
 |GND|GND|
 |PA5|SCL|
 |PA7|SDA|
-|RESET|PA0|
-|DC|PA1|
-|CS|PA4|
-|BLK|PA2|
+|PA0|RESET|
+|PA1|DC|
+|PA4|CS|
+|PA2|BLK|
