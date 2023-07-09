@@ -837,3 +837,63 @@ void Picture_display(uint16_t x,uint16_t y,uint16_t length,uint16_t width,const 
         }
     }
 }
+
+void LCD_Full(u8 *buffer,u16 length,uint16_t color)
+{
+    Add_set(0, 0, 239, 239);
+    for (int i = 0; i < length;i+=2)
+    {
+        *buffer=color>>8;
+        buffer++;
+        *buffer=color;
+        buffer++;
+    }
+
+    for (int i = 0; i < 48; i++)
+    {
+
+        SPI_I2S_DMACmd(SPI1, SPI_I2S_DMAReq_Tx, ENABLE); // SPI1DMA
+
+        DMA_Cmd(DMA1_Channel3, DISABLE);
+        DMA_SetCurrDataCounter(DMA1_Channel3, length);
+        DMA_Cmd(DMA1_Channel3, ENABLE);
+
+        while (1)
+        {
+            if (DMA_GetFlagStatus(DMA1_FLAG_TC3) != RESET)
+            {
+                DMA_ClearFlag(DMA1_FLAG_TC3);
+                break;
+            }
+        }
+    }
+}
+void LCD_Pic_Display(uint16_t x, uint16_t y, uint16_t length, uint16_t width, u16 perLength, u8* buffer, const unsigned char *ptr_pic)
+{
+    //printf("length: %d\r\n",perLength);
+    int k = length * width;
+    Add_set(x, y, x + length - 1, y + width - 1);
+
+    for (int z = 0; z < k / perLength*2; z++)
+    {
+        int temp = z*perLength;
+        for (int s = 0; s < perLength; s++)
+        {
+            *(buffer+s) = *(ptr_pic+temp+s);
+        }
+        SPI_I2S_DMACmd(SPI1, SPI_I2S_DMAReq_Tx, ENABLE); // SPI1DMA
+
+        DMA_Cmd(DMA1_Channel3, DISABLE);
+        DMA_SetCurrDataCounter(DMA1_Channel3, perLength);
+        DMA_Cmd(DMA1_Channel3, ENABLE);
+
+        while (1)
+        {
+            if (DMA_GetFlagStatus(DMA1_FLAG_TC3) != RESET)
+            {
+                DMA_ClearFlag(DMA1_FLAG_TC3);
+                break;
+            }
+        }
+    }
+}

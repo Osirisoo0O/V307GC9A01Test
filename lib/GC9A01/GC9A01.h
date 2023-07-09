@@ -214,6 +214,8 @@ void TFT_clear(void);
 void TFT_full(unsigned int color);
 void TFT_dispoint(unsigned char x,unsigned char y,unsigned int color);
 void Picture_display(uint16_t x,uint16_t y,uint16_t length,uint16_t width,const unsigned char *ptr_pic);
+void LCD_Full(u8* buffer,u16 length,uint16_t color);
+void LCD_Pic_Display(uint16_t x, uint16_t y, uint16_t length, uint16_t width, u16 perLength, u8* buffer,const unsigned char *ptr_pic);
 
 
 
