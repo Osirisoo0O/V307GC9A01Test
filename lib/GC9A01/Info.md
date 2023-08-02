@@ -2,8 +2,8 @@
 
 ## 引脚说明
 
-| 引脚名称 | 用途           | 备注                       |
-| -------- | -------------- | -------------------------- |
+| 引脚名称 | 用途| 备注|
+| :-: | :-: | :-: |
 | VCC      | +3.3V供电      |                            |
 | GND      | 供电地         |                            |
 | SCL      | SPI的CLK信号   |                            |
@@ -17,8 +17,8 @@
 
 ## 屏幕基础参数
 
-| 参数     | 数据                   | 备注                                  |
-| -------- | ---------------------- | ------------------------------------- |
+| 参数| 数据| 备注|
+| :-: | :-: | :- |
 | 分辨率   | 240*240                |                                       |
 | 颜色类型 | RGB565彩色             | 每个像素点需要一个16bit的数据进行显示 |
 | 驱动IC   | GC9A01                 |                                       |
@@ -37,20 +37,20 @@
 
 ## 屏幕控制相关寄存器
 
-| 寄存器名称                   | 寄存器ID                                 | 默认参数                             | 说明     |
-| ---------------------------- | ---------------------------------------- | ------------------------------------ | -------- |
-| **Inter Register Enable1**   | 0xFE                                     | 1+2=enable Inter_command             |          |
-| **Inter Register Enable2**   | 0xEF                                     | 1+2=enable Inter_command             |          |
-| **Display Function Control** | 0xB6                                     | 0x00 0x20                            | 扫描方向 |
-| **Memory Access Control**    | 0x36                                     | 设置显示起始点                       |          |
-| **Pixel Format Set**         | 0x3A                                     | 设置RGB彩色接收格式（12、16、18bit） |          |
-| **Power Control**            | 0xC3<br />0xC4<br />0xC9                 | 设置LCD的电压输出电平                |          |
-| **Set GAMMA**                | 0xF0<br />0xF1<br />0xF2<br />0xF3<br /> | 设置LCD显示伽马值                    |          |
-| **Frame Rate**               | 0xE8                                     | 设置显示的翻转模式                   |          |
-| **Tearing Effect Line OFF**  | 0x34                                     | 关闭撕裂效果                         |          |
-| **Display Inversion ON**     | 0x21                                     | 进入翻转显示模式                     |          |
-| **Sleep Out Mode**           | 0x11                                     | 退出休眠模式                         |          |
-| **Display ON**               | 0x29                                     | 使能显示功能                         |          |
+|寄存器名称|寄存器ID|默认参数|说明|
+|:-:|:-:|:--:|:-:|
+| **Inter Register Enable1**| 0xFE| 1+2=enable Inter_command||
+| **Inter Register Enable2**| 0xEF| 1+2=enable Inter_command||
+| **Display Function Control** | 0xB6| 0x00 0x20| 扫描方向 |
+| **Memory Access Control**| 0x36| 设置显示起始点||
+| **Pixel Format Set**| 0x3A| 设置RGB彩色接收格式（12、16、18bit） ||
+| **Power Control**| 0xC3<br />0xC4<br />0xC9| 设置LCD的电压输出电平||
+| **Set GAMMA**| 0xF0<br />0xF1<br />0xF2<br />0xF3<br /> | 设置LCD显示伽马值||
+| **Frame Rate**| 0xE8| 设置显示的翻转模式||
+| **Tearing Effect Line OFF**  | 0x34| 关闭撕裂效果||
+| **Display Inversion ON**     | 0x21| 进入翻转显示模式||
+| **Sleep Out Mode**| 0x11| 退出休眠模式||
+| **Display ON**| 0x29| 使能显示功能||
 
 
 

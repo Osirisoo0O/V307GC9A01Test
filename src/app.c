@@ -3,31 +3,6 @@
 #include "GC9A01_Test.h"
 #include "board.h"
 
-// void SPI_Write_Bus(uint32_t SPIx, uint16_t data)
-// {
-//     while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET)
-//     {
-//     }
-//     SPI_I2S_SendData((SPI_TypeDef *)SPIx, data);
-//     Delay_Us(6);
-// }
-// void SPI_Send_CMD(uint16_t data)
-// {
-//     LCD_Send_Command();
-//     SPI_Write_Bus(SPI1, data);
-//     LCD_Send_Data();
-// }
-// void SPI_Send_Data(uint16_t data)
-// {
-//     SPI_Write_Bus(SPI1, data);
-// }
-
-// void SPI_Send_DataH(uint16_t data)
-// {
-//     LCD_Send_Data();
-//     SPI_Write_Bus(SPI1, data >> 8);
-//     SPI_Write_Bus(SPI1, data);
-// }
 
 u8 TxData[BufferSize];
 
@@ -37,26 +12,24 @@ int main(void)
     TFT_init();
 
     Delay_Ms(1000);
-    int delays = 100;
+    int delays = 500;
     while (1)
     {
 #if 1
+        LCD_Full((u8*)&TxData,BufferSize,WHITE);
         Delay_Ms(delays);
-        LCD_Full(&TxData,BufferSize,WHITE);
+        LCD_Full((u8*)&TxData,BufferSize,RED);
         Delay_Ms(delays);
-        LCD_Full(&TxData,BufferSize,RED);
+        LCD_Full((u8*)&TxData,BufferSize,BLACK);
         Delay_Ms(delays);
-        LCD_Full(&TxData,BufferSize,BLACK);
+        LCD_Full((u8*)&TxData,BufferSize,BLUE);
         Delay_Ms(delays);
-        LCD_Full(&TxData,BufferSize,BLUE);
+        LCD_Full((u8*)&TxData,BufferSize,GREEN);
         Delay_Ms(delays);
-        LCD_Full(&TxData,BufferSize,BRED);
+        LCD_Full((u8*)&TxData,BufferSize,GBLUE);
         Delay_Ms(delays);
-        LCD_Full(&TxData,BufferSize,GRED);
+        LCD_Pic_Display(0, 0, 240, 240, BufferSize, (u8*)&TxData, (const unsigned char *)&gImage_eye);
         Delay_Ms(delays);
-        LCD_Full(&TxData,BufferSize,GBLUE);
-        Delay_Ms(delays);
-        LCD_Pic_Display(0, 0, 240, 240, BufferSize, &TxData, &gImage_eye);
 
 #else
         Delay_Ms(delays);
@@ -77,6 +50,6 @@ int main(void)
         Picture_display(0, 0, 240, 240, gImage_eye);
 #endif
 
-        Delay_Ms(2000);
+        Delay_Ms(1000);
     }
 }
